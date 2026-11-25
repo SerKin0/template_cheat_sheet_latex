@@ -1,0 +1,36 @@
+% ======================================================================
+%  collage.tex
+%  Печать компактных страниц 3 x 4 на одном листе A4.
+%
+%  Сначала соберите main.pdf:
+%      latexmk -pdf main.tex
+%  Затем:
+%      latexmk -pdf collage.tex
+%
+%  pages=2-last пропускает титульный лист с оглавлением.
+%  Если структура изменилась, поправьте номер первой страницы.
+% ======================================================================
+\documentclass[a4paper]{article}
+\usepackage{pdfpages}
+\usepackage{geometry}
+
+\begin{document}
+	\newgeometry{
+		top=10mm,
+		right=10mm,
+		left=10mm,
+		bottom=10mm
+	}
+
+	% nup=3x4: 3 столбца и 4 строки, то есть 12 страниц на лист.
+	% delta: промежутки между страницами.
+	% frame=true: рамка вокруг каждой страницы, удобно для резки.
+	\includepdf[
+		pages=2-last,
+		nup=3x4,
+		delta=0mm 0mm,
+		frame=true,
+		noautoscale=true,
+		scale=0.4285714285714286
+	]{main.pdf}
+\end{document}

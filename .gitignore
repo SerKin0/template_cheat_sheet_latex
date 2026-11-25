@@ -1,0 +1,24 @@
+# Сгенерированные PDF
+*.pdf
+
+# Вспомогательные файлы LaTeX
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.glo
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Локальная копия старого репозитория
+/template/

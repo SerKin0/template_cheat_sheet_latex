@@ -1,0 +1,38 @@
+name: Build PDF
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Compile main.pdf
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          latexmk_use_latex_engine: pdflatex
+          args: -pdf -interaction=nonstopmode -halt-on-error -file-line-error
+
+      - name: Compile collage.pdf
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: collage.tex
+          latexmk_use_latex_engine: pdflatex
+          args: -pdf -interaction=nonstopmode -halt-on-error -file-line-error
+
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cheat-sheet-pdf
+          path: |
+            main.pdf
+            collage.pdf
+          if-no-files-found: error

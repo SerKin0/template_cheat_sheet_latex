@@ -1,0 +1,290 @@
+% ======================================================================
+%  cheatsheet.sty
+%  Вёрстка компактной шпаргалки: 14 x 16 см, 8 pt, pdfLaTeX.
+%
+%  Здесь собраны все настройки страницы, пакеты, макросы и блоки.
+%  В main.tex остаются только метаданные и содержание.
+% ======================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{cheatsheet}[2026/11/26 v1.0 Cheat sheet style]
+
+% ----------------------------------------------------------------------
+%  Базовые пакеты
+% ----------------------------------------------------------------------
+\RequirePackage{cmap}
+\RequirePackage[T2A]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[english,russian]{babel}
+\RequirePackage{indentfirst}
+\RequirePackage{geometry}
+\RequirePackage{enumitem}
+\RequirePackage{multicol}
+\RequirePackage{multirow}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+\RequirePackage{longtable}
+\RequirePackage{makecell}
+\RequirePackage{graphicx}
+\RequirePackage{float}
+\RequirePackage[tableposition=top]{caption}
+\RequirePackage{subcaption}
+\RequirePackage[table]{xcolor}
+\RequirePackage{tikz}
+\RequirePackage{circuitikz}
+\RequirePackage{pgfplots}
+\RequirePackage{tcolorbox}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsfonts}
+\RequirePackage{mathtools}
+\RequirePackage{icomma}
+\RequirePackage{esint}
+\RequirePackage{cancel}
+\RequirePackage{siunitx}
+\RequirePackage{hyperref}
+\RequirePackage[russian,capitalize]{cleveref}
+\RequirePackage{titletoc}
+\RequirePackage{tocloft}
+
+% ----------------------------------------------------------------------
+%  Страница
+% ----------------------------------------------------------------------
+\geometry{
+	paperheight=16cm,
+	paperwidth=14cm,
+	left=0.3cm,
+	right=0.3cm,
+	top=0.3cm,
+	bottom=2.3cm,
+	footskip=2.8cm
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=black,
+	citecolor=black,
+	pdfencoding=auto,
+	psdextra=true
+}
+
+\setlength{\parindent}{1.25em}
+\setlength{\parskip}{0.1em}
+\linespread{1.0}
+\sloppy
+\frenchspacing
+
+% ----------------------------------------------------------------------
+%  Подписи рисунков и таблиц
+% ----------------------------------------------------------------------
+\captionsetup[figure]{
+	labelsep=period,
+	name={Рис.},
+	justification=centering,
+	font=small,
+	labelfont=bf,
+	skip=4pt,
+	belowskip=2pt
+}
+
+\captionsetup[table]{
+	labelsep=period,
+	name={Таблица},
+	justification=centering,
+	font=small,
+	labelfont=bf,
+	skip=4pt,
+	belowskip=2pt
+}
+
+\renewcommand{\thetable}{\arabic{table}}
+
+% ----------------------------------------------------------------------
+%  Ссылки
+% ----------------------------------------------------------------------
+\crefname{figure}{рис.}{рис.}
+\Crefname{figure}{Рис.}{Рис.}
+\crefname{table}{табл.}{табл.}
+\Crefname{table}{Табл.}{Табл.}
+\crefname{appsection}{прил.}{прил.}
+\Crefname{appsection}{Прил.}{Прил.}
+\crefname{equation}{}{(}
+\crefformat{equation}{(#2#1#3)}
+\crefrangelabelformat{equation}{(#3#1#4--#5#2#6)}
+\crefmultiformat{equation}{(#2#1#3)}{ и~(#2#1#3)}{, (#2#1#3)}{ и~(#2#1#3)}
+
+% ----------------------------------------------------------------------
+%  Заголовки
+% ----------------------------------------------------------------------
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{\z@}%
+	{-2.5ex \@plus -0.8ex \@minus -.2ex}%
+	{1.8ex \@plus.2ex}%
+	{\Large\bfseries\centering\MakeUppercase}}
+\renewcommand{\thesection}{\Roman{section}.}
+
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
+	{-2.5ex \@plus -0.8ex \@minus -.2ex}%
+	{1.2ex \@plus.2ex}%
+	{\large\bfseries}}
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
+	{-2.5ex \@plus -0.8ex \@minus -.2ex}%
+	{1.0ex \@plus.2ex}%
+	{\normalsize\bfseries}}
+\renewcommand{\thesubsubsection}{\arabic{subsection}.\arabic{subsubsection}}
+\makeatother
+
+% ----------------------------------------------------------------------
+%  Приложения и перечисления
+% ----------------------------------------------------------------------
+\newcounter{appsection}
+\renewcommand{\theappsection}{\arabic{appsection}}
+
+\newcommand{\appendixsection}[1]{%
+	\refstepcounter{appsection}%
+	\vspace{0.8em}%
+	\noindent{\large\textbf{Приложение \theappsection. #1}}%
+	\par\nopagebreak
+	\addcontentsline{toc}{subsection}{Приложение \theappsection. #1}%
+	\label{app:#1}%
+}
+
+\renewcommand{\thesubtable}{\asbuk{subtable}}
+\renewcommand{\thesubfigure}{\asbuk{subfigure}}
+
+\setlist[enumerate,2]{label=\asbuk*)}
+\renewcommand\labelitemi{{$\cdot$}}
+
+\makeatletter
+\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
+\makeatother
+
+% ----------------------------------------------------------------------
+%  Оглавление
+% ----------------------------------------------------------------------
+\renewcommand{\contentsname}{Оглавление}
+
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{1.2em}{2.8em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{3.2em}{2.8em}}
+\renewcommand*\l@subsubsection{\@dottedtocline{3}{6.0em}{3.6em}}
+\makeatother
+
+\renewcommand{\cfttoctitlefont}{\hfill\normalsize\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftbeforesecskip}{0.3em}
+
+% ----------------------------------------------------------------------
+%  Формулы и списки
+% ----------------------------------------------------------------------
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}%
+	{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\abovedisplayskip=3pt
+\belowdisplayskip=3pt
+\abovedisplayshortskip=3pt
+\belowdisplayshortskip=3pt
+
+\setlist[enumerate]{
+	noitemsep,
+	topsep=0.1em,
+	parsep=0pt,
+	partopsep=0pt,
+	itemsep=0.1em
+}
+
+\setlist[itemize]{
+	noitemsep,
+	topsep=0.1em,
+	parsep=0pt,
+	partopsep=0pt,
+	itemsep=0.1em
+}
+
+% ----------------------------------------------------------------------
+%  Блоки
+% ----------------------------------------------------------------------
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{tbox}[2][]{
+	colback=white!98!black,
+	colframe=white!80!black,
+	fonttitle=\bfseries,
+	coltitle=black,
+	title={#2},
+	breakable,
+	standard,
+	before={\addcontentsline{toc}{subsubsection}{#2}},
+	#1
+}
+
+\newtcolorbox{librarybox}{
+	enhanced,
+	colback=gray!10,
+	boxrule=0pt,
+	arc=0pt,
+	outer arc=0pt,
+	left=4pt,
+	right=3pt,
+	top=3pt,
+	bottom=3pt,
+	before skip=8pt,
+	after skip=8pt,
+	overlay={
+		\draw[gray!50, line width=3pt]
+		(frame.south west) -- (frame.north west);
+		\draw[gray!50, line width=1pt]
+		([xshift=3pt]frame.south west) -- ([xshift=3pt]frame.north west);
+	}
+}
+
+% ----------------------------------------------------------------------
+%  Макросы для шпаргалки
+% ----------------------------------------------------------------------
+\newcommand{\tquastion}[1]{%
+	\newpage
+	\phantomsection
+	\addcontentsline{toc}{subsection}{#1}%
+	\begin{librarybox}#1\end{librarybox}%
+}
+
+\DeclareMathOperator{\re}{\operatorname{Re}}
+\DeclareMathOperator{\im}{\operatorname{Im}}
+\DeclareMathOperator{\Epsilon}{\mathcal{E}}
+\DeclareMathOperator{\Div}{\operatorname{div}}
+\DeclareMathOperator{\Rot}{\operatorname{rot}}
+\DeclareMathOperator{\Grad}{\operatorname{grad}}
+\DeclareMathOperator{\R}{\mathbb{R}}
+
+\makeatletter
+\newcommand\incircbin{\mathpalette\@incircbin}
+\newcommand\@incircbin[2]{%
+	\mathbin{\ooalign{\hidewidth$#1#2$\hidewidth\crcr$#1\bigcirc$}}%
+}
+\makeatother
+
+\newcommand{\pp}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\dd}[2]{\frac{d {#1}}{d {#2}}}
+\newcommand{\ppp}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\ddd}[2]{$\frac{d^2 {#1}}{d {#2}^2}$}
+\newcommand{\dif}{\mathop{}\!\mathrm{d}}
+
+\renewcommand{\theadfont}{\normalsize}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\newcommand{\frc}[2]{\raisebox{2pt}{$#1$}\big/\raisebox{-3pt}{$#2$}}
+\newcommand{\tfrc}[2]{\raisebox{2pt}{{\footnotesize $#1$}}/\raisebox{-3pt}{{\footnotesize $#2$}}}
+
+% ----------------------------------------------------------------------
+%  Таблицы и графики
+% ----------------------------------------------------------------------
+\pgfplotsset{compat=1.18}
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+
+\endinput
